@@ -8,11 +8,7 @@
 
 import Foundation
 
-open class EmojiTimeFormatter: Formatter {
-
-    // MARK: - Properties
-
-    fileprivate let calendar = Calendar.autoupdatingCurrent
+open class EmojiTimeFormatter: DateFormatter {
 
     // MARK: - Formatter
 
@@ -37,6 +33,21 @@ open class EmojiTimeFormatter: Formatter {
         obj?.pointee = date(for: clockFaceEmoji) as AnyObject
 
         return true
+    }
+
+    // MARK: - Date Formatter
+
+    open override func string(from date: Date) -> String {
+        return clockFace(from: date).description
+    }
+
+    open override func date(from string: String) -> Date? {
+        // If argument is not a clock face emoji, do nothing.
+        guard let clockFaceEmoji = ClockFaceEmoji(rawValue: string) else {
+            return nil
+        }
+
+        return date(from: clockFaceEmoji)
     }
 
     // MARK: - Typesafety first
